@@ -1,7 +1,15 @@
 services:
   daily-claim:
     build: .
+    image: breezeblue-daily-claim:latest
     container_name: breezeblue-daily-claim
-    env_file:
-      - .env
+    ports:
+      - "8080:8080"
+    environment:
+      BREEZE_COOKIE: "${BREEZE_COOKIE}"
+      BREEZE_USER_AGENT: "${BREEZE_USER_AGENT:-Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36}"
+      RUN_AT: "${RUN_AT:-00:05}"
+      RUN_ONCE: "${RUN_ONCE:-0}"
+    volumes:
+      - ./data:/data
     restart: unless-stopped
