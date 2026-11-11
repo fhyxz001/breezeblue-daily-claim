@@ -1,0 +1,30 @@
+name: Build offline image
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t breezeblue-daily-claim:latest .
+
+      - name: Export image
+        run: |
+          docker save breezeblue-daily-claim:latest \
+            | gzip -9 > breezeblue-daily-claim-linux-amd64.tar.gz
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: breezeblue-daily-claim-${{ github.sha }}
+          path: breezeblue-daily-claim-linux-amd64.tar.gz
+          if-no-files-found: error

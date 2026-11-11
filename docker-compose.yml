@@ -1,0 +1,7 @@
+services:
+  daily-claim:
+    build: .
+    container_name: breezeblue-daily-claim
+    env_file:
+      - .env
+    restart: unless-stopped
